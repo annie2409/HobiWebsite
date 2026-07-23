@@ -678,7 +678,7 @@
             <div className="reveal">
               <span style={{ display:"inline-block", background:C.white, color:C.blue, padding:"6px 16px", borderRadius:"99px", fontSize:"12px", fontFamily:"Sora", fontWeight:600, letterSpacing:"1px", textTransform:"uppercase", marginBottom:"20px" }}>Our Products</span>
               <h1 style={{ fontSize:"clamp(32px,5vw,52px)", fontWeight:800, color:C.gray900, marginBottom:"20px" }}>WanderSync App</h1>
-              <p style={{ color:C.gray600, fontSize:"18px", maxWidth:"560px", margin:"0 auto", lineHeight:1.7 }}>Intelligent, constraint-aware travel planning and collaboration for the modern explorer.</p>
+              <p style={{ color:C.gray600, fontSize:"18px", maxWidth:"560px", margin:"0 auto", lineHeight:1.7 }}>Real-time collaborative travel planning for you and your friends.</p>
             </div>
           </section>
 
@@ -686,9 +686,9 @@
             <div className="two-col" style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"60px", alignItems:"center", marginBottom:"80px" }}>
               <div className="reveal">
                 <h2 style={{ fontFamily:"Sora", fontWeight:700, fontSize:"clamp(24px,3vw,36px)", marginBottom:"20px", lineHeight:1.2 }}>Travel Planning, Synchronized</h2>
-                <p style={{ color:C.gray600, fontSize:"16px", lineHeight:1.8, marginBottom:"28px" }}>WanderSync turns the chaos of group travel planning into a seamless, shared experience. Import your saved maps, input your preferences, and let our intelligent constraint-aware routing optimizer build your perfect day-by-day plan.</p>
+                <p style={{ color:C.gray600, fontSize:"16px", lineHeight:1.8, marginBottom:"28px" }}>WanderSync turns the chaos of group travel planning into a seamless, shared experience. Create trips, invite members, suggest destinations, vote on options, and build your day-by-day itinerary together in real time.</p>
                 <div style={{ display:"flex", gap:"20px", flexWrap:"wrap", marginBottom:"28px" }}>
-                  {[["10k+","Trips Built"],["1-Click","Maps Import"],["Real-time","Sync"]].map(([val,lab]) => (
+                  {[["10k+","Sync Updates"],["Google","Maps API"],["Real-time","Socket.io"]].map(([val,lab]) => (
                     <div key={lab} style={{ textAlign:"center" }}>
                       <p style={{ fontFamily:"Sora", fontWeight:800, fontSize:"32px", background:`linear-gradient(135deg,${C.blue},${C.green})`, WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent" }}>{val}</p>
                       <p style={{ color:C.gray600, fontSize:"13px" }}>{lab}</p>
@@ -708,9 +708,9 @@
                     </div>
                   </div>
                   {[
-                    { time:"09:00 AM", name:"Senso-ji Temple", emoji:"🏮", detail:"1.5h dwell · Quiet morning walk", trans:"🚶 Walk (12m)" },
-                    { time:"11:30 AM", name:"Ichiran Ramen", emoji:"🍜", detail:"1.0h dwell · Lunch constraint", trans:"🚇 Transit (15m)" },
-                    { time:"01:00 PM", name:"Ueno Park", emoji:"🌸", detail:"2.0h dwell · Seasonal check ✓", trans:null },
+                    { time:"09:00 AM", name:"Senso-ji Temple", emoji:"🏮", detail:"1.5h dwell · Quiet morning walk", trans:"🚶 Walking route directions" },
+                    { time:"11:30 AM", name:"Ichiran Ramen", emoji:"🍜", detail:"1.0h dwell · Lunch suggestion", trans:"🚇 Transit directions" },
+                    { time:"01:00 PM", name:"Ueno Park", emoji:"🌸", detail:"2.0h dwell · Voted attraction ✓", trans:null },
                   ].map((item, idx) => (
                     <div key={idx}>
                       <div style={{ background:"rgba(255,255,255,0.05)", border:"1px solid rgba(255,255,255,0.1)", borderRadius:"14px", padding:"12px 14px", display:"flex", gap:"10px", alignItems:"center" }}>
@@ -732,15 +732,15 @@
               </div>
             </div>
 
-            <SectionHeader label="Features" title="Designed for Smart Travel" subtitle="Powerful tools that turn scattered recommendations into a structured journey." />
+            <SectionHeader label="Features" title="Designed for Real-Time Sync" subtitle="Powerful tools that turn scattered recommendations into a structured, collaborative journey." />
             <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))", gap:"24px" }}>
               {[
-                { icon:"🗺️", title:"1-Click Maps Import", desc:"Paste your Google Maps Shared list, Takeout JSON, or KML files, and instantly import all places into your itinerary workspace." },
-                { icon:"🤖", title:"Constraint-Aware Routing", desc:"No more naive loops. The optimizer respects opening hours, dwell times, seasonal closures, and mixed transit types." },
-                { icon:"✍️", title:"Save-Time Intent Notes", desc:"Write why you saved a spot (e.g. 'Okonomiyaki recommended by @annie') right at capture time before you forget." },
-                { icon:"👥", title:"Real-Time Collaboration", desc:"Invite friends to vote on attractions, debate plans in the integrated group chat, and watch itinerary updates instantly." },
-                { icon:"📴", title:"Offline Itinerary Access", desc:"No signal, no stress. Access your full travel schedules, routes, and place descriptions offline while exploring." },
-                { icon:"📊", title:"Logistical Analytics", desc:"Track travel durations, total distances, walk ratios, and calorie metrics to balance active vs relaxing days." },
+                { icon:"🤖", title:"Real-Time Sync", desc:"Uses Socket.io to keep itinerary changes, sorting orders, and planning details synced across all devices instantly." },
+                { icon:"👥", title:"Presence Indicators", desc:"See who's currently online planning with you, typing in the group chat, or editing specific stops on the itinerary." },
+                { icon:"🗳️", title:"Collaborative Voting", desc:"Suggest spots and let everyone vote on their favorite activities so you reach a group consensus effortlessly." },
+                { icon:"🗺️", title:"Interactive Google Maps", desc:"See your plan pinned automatically on the map with directions and route details rendered between each stop." },
+                { icon:"💬", title:"Group Chat Workspace", desc:"An integrated chat panel allows you to bounce ideas around, debate routes, and make decisions without switching apps." },
+                { icon:"↕️", title:"Drag-and-Drop planning", desc:"A highly responsive day-by-day scheduling board makes organizing and reordering items quick and fluid." },
               ].map(f => (
                 <div className="reveal" key={f.title}>
                   <Card>
@@ -754,8 +754,8 @@
 
             <div className="reveal" style={{ marginTop:"60px", textAlign:"center", padding:"60px", background:`linear-gradient(135deg,${C.blueLight},${C.greenLight})`, borderRadius:"24px" }}>
               <h3 style={{ fontFamily:"Sora", fontWeight:700, fontSize:"28px", marginBottom:"16px" }}>Ready to Sync Your Journey?</h3>
-              <p style={{ color:C.gray600, marginBottom:"28px", fontSize:"16px" }}>Be the first to plan trips with WanderSync.</p>
-              <Btn onClick={() => nav("Contact")} style={{ background:`linear-gradient(135deg,${C.blue},${C.green})` }}>Join the Waitlist →</Btn>
+              <p style={{ color:C.gray600, marginBottom:"28px", fontSize:"16px" }}>Start planning collaborative travel with WanderSync.</p>
+              <Btn onClick={() => nav("Contact")} style={{ background:`linear-gradient(135deg,${C.blue},${C.green})` }}>Get Started →</Btn>
             </div>
           </Section>
         </div>
