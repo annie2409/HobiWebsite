@@ -884,6 +884,12 @@ function WanderSyncPage({ setPage }) {
           <p style={{ color: C.gray600, fontSize: "18px", maxWidth: "560px", margin: "0 auto", lineHeight: 1.7 }}>
             Real-time collaborative travel planning for you and your friends.
           </p>
+          <div style={{ marginTop: "28px", display: "flex", gap: "12px", justifyContent: "center" }}>
+            <a href="http://localhost:3000/login" target="_blank" rel="noopener noreferrer">
+              <Btn>Launch App →</Btn>
+            </a>
+            <Btn variant="outline" onClick={() => nav("Contact")}>Contact Support</Btn>
+          </div>
         </div>
       </section>
 
@@ -965,7 +971,9 @@ function WanderSyncPage({ setPage }) {
         <div className="reveal" style={{ marginTop: "60px", textAlign: "center", padding: "60px", background: `linear-gradient(135deg, ${C.blueLight}, ${C.greenLight})`, borderRadius: "24px" }}>
           <h3 style={{ fontFamily: "Sora", fontWeight: 700, fontSize: "28px", marginBottom: "16px" }}>Ready to Sync Your Journey?</h3>
           <p style={{ color: C.gray600, marginBottom: "28px", fontSize: "16px" }}>Start planning collaborative travel with WanderSync.</p>
-          <Btn onClick={() => nav("Contact")} style={{ background: `linear-gradient(135deg, ${C.blue}, ${C.green})` }}>Get Started →</Btn>
+          <a href="http://localhost:3000/login" target="_blank" rel="noopener noreferrer">
+            <Btn style={{ background: `linear-gradient(135deg, ${C.blue}, ${C.green})` }}>Launch App →</Btn>
+          </a>
         </div>
       </Section>
     </div>
