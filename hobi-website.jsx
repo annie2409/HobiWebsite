@@ -55,6 +55,61 @@ const GlobalStyle = () => (
     input, textarea, select {
       font-family: 'DM Sans', sans-serif;
     }
+
+    /* Dropdown Navigation */
+    .nav-dropdown-trigger {
+      position: relative;
+      display: inline-block;
+    }
+    .nav-dropdown-menu {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(12px) scale(0.95);
+      opacity: 0;
+      visibility: hidden;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.05);
+      padding: 12px;
+      min-width: 280px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+      z-index: 1010;
+    }
+    .nav-dropdown-trigger:hover .nav-dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(4px) scale(1);
+    }
+    .nav-dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.15s ease;
+      width: 100%;
+    }
+    .nav-dropdown-item:hover {
+      background: #E8F1FB;
+    }
+    .nav-dropdown-trigger::after {
+      content: '';
+      position: absolute;
+      bottom: -12px;
+      left: 0;
+      right: 0;
+      height: 12px;
+    }
   `}</style>
 );
 
@@ -75,6 +130,7 @@ function useReveal() {
 function Navbar({ page, setPage }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 20);
@@ -83,6 +139,13 @@ function Navbar({ page, setPage }) {
   }, []);
 
   const links = ["Home", "About", "Products", "Media", "Future Plans", "Contact"];
+  const isProductsActive = page === "Stretch App" || page === "WanderSync App";
+
+  const nav = (l) => {
+    setPage(l);
+    window.scrollTo(0, 0);
+    setMenuOpen(false);
+  };
 
   const navStyle = {
     position: "fixed",
@@ -114,26 +177,69 @@ function Navbar({ page, setPage }) {
 
       {/* Desktop links */}
       <div style={{ display: "flex", gap: "4px", alignItems: "center" }} className="nav-desktop">
-        {links.map((l) => (
-          <button
-            key={l}
-            onClick={() => { setPage(l); window.scrollTo(0,0); setMenuOpen(false); }}
-            style={{
-              background: page === l ? C.blueLight : "none",
-              border: "none",
-              cursor: "pointer",
-              padding: "8px 16px",
-              borderRadius: "99px",
-              fontFamily: "DM Sans",
-              fontWeight: page === l ? 600 : 400,
-              fontSize: "14px",
-              color: page === l ? C.blue : C.gray600,
-              transition: "all 0.2s",
-            }}
-          >
-            {l}
-          </button>
-        ))}
+        {links.map((l) => {
+          if (l === "Products") {
+            return (
+              <div className="nav-dropdown-trigger" key={l}>
+                <button
+                  style={{
+                    background: isProductsActive ? C.blueLight : "none",
+                    border: "none",
+                    cursor: "pointer",
+                    padding: "8px 16px",
+                    borderRadius: "99px",
+                    fontFamily: "DM Sans",
+                    fontWeight: isProductsActive ? 600 : 400,
+                    fontSize: "14px",
+                    color: isProductsActive ? C.blue : C.gray600,
+                    transition: "all 0.2s",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "4px"
+                  }}
+                >
+                  Products <span style={{ fontSize: "10px" }}>▼</span>
+                </button>
+                <div className="nav-dropdown-menu">
+                  <button className="nav-dropdown-item" onClick={() => nav("Stretch App")}>
+                    <span style={{ fontSize: "20px" }}>🧘</span>
+                    <div>
+                      <div style={{ fontFamily: "Sora", fontWeight: 600, fontSize: "13px", color: C.gray900 }}>Stretch Wellness</div>
+                      <div style={{ fontSize: "11px", color: C.gray600 }}>Personalized routine tracker</div>
+                    </div>
+                  </button>
+                  <button className="nav-dropdown-item" onClick={() => nav("WanderSync App")}>
+                    <span style={{ fontSize: "20px" }}>🗺️</span>
+                    <div>
+                      <div style={{ fontFamily: "Sora", fontWeight: 600, fontSize: "13px", color: C.gray900 }}>WanderSync App</div>
+                      <div style={{ fontSize: "11px", color: C.gray600 }}>Intelligent travel planning</div>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            );
+          }
+          return (
+            <button
+              key={l}
+              onClick={() => nav(l)}
+              style={{
+                background: page === l ? C.blueLight : "none",
+                border: "none",
+                cursor: "pointer",
+                padding: "8px 16px",
+                borderRadius: "99px",
+                fontFamily: "DM Sans",
+                fontWeight: page === l ? 600 : 400,
+                fontSize: "14px",
+                color: page === l ? C.blue : C.gray600,
+                transition: "all 0.2s",
+              }}
+            >
+              {l}
+            </button>
+          );
+        })}
         <button
           onClick={() => { setPage("Contact"); window.scrollTo(0,0); }}
           style={{
@@ -175,20 +281,67 @@ function Navbar({ page, setPage }) {
           background: C.white, borderBottom: `1px solid ${C.gray200}`,
           padding: "16px 24px", display: "flex", flexDirection: "column", gap: "4px",
         }}>
-          {links.map((l) => (
-            <button
-              key={l}
-              onClick={() => { setPage(l); window.scrollTo(0,0); setMenuOpen(false); }}
-              style={{
-                background: page === l ? C.blueLight : "none",
-                border: "none", cursor: "pointer", padding: "12px 16px",
-                borderRadius: "12px", fontFamily: "DM Sans", fontWeight: page === l ? 600 : 400,
-                fontSize: "15px", color: page === l ? C.blue : C.gray600, textAlign: "left",
-              }}
-            >
-              {l}
-            </button>
-          ))}
+          {links.map((l) => {
+            if (l === "Products") {
+              return (
+                <div key={l} style={{ display: "flex", flexDirection: "column" }}>
+                  <button
+                    onClick={() => setMobileProductsOpen(!mobileProductsOpen)}
+                    style={{
+                      background: isProductsActive ? C.blueLight : "none",
+                      border: "none", cursor: "pointer", padding: "12px 16px",
+                      borderRadius: "12px", fontFamily: "DM Sans", fontWeight: isProductsActive ? 600 : 400,
+                      fontSize: "15px", color: isProductsActive ? C.blue : C.gray600, textAlign: "left",
+                      display: "flex", justifyContent: "space-between", alignItems: "center"
+                    }}
+                  >
+                    <span>Products</span>
+                    <span>{mobileProductsOpen ? "▲" : "▼"}</span>
+                  </button>
+                  {mobileProductsOpen && (
+                    <div style={{ paddingLeft: "16px", display: "flex", flexDirection: "column", gap: "2px", marginTop: "4px", marginBottom: "4px" }}>
+                      <button
+                        onClick={() => nav("Stretch App")}
+                        style={{
+                          background: page === "Stretch App" ? C.blueLight : "none",
+                          border: "none", cursor: "pointer", padding: "10px 16px",
+                          borderRadius: "10px", fontFamily: "DM Sans", fontWeight: page === "Stretch App" ? 600 : 400,
+                          fontSize: "14px", color: page === "Stretch App" ? C.blue : C.gray600, textAlign: "left",
+                        }}
+                      >
+                        🧘 Stretch Wellness
+                      </button>
+                      <button
+                        onClick={() => nav("WanderSync App")}
+                        style={{
+                          background: page === "WanderSync App" ? C.blueLight : "none",
+                          border: "none", cursor: "pointer", padding: "10px 16px",
+                          borderRadius: "10px", fontFamily: "DM Sans", fontWeight: page === "WanderSync App" ? 600 : 400,
+                          fontSize: "14px", color: page === "WanderSync App" ? C.blue : C.gray600, textAlign: "left",
+                        }}
+                      >
+                        🗺️ WanderSync App
+                      </button>
+                    </div>
+                  )}
+                </div>
+              );
+            }
+            return (
+              <button
+                key={l}
+                onClick={() => nav(l)}
+                style={{
+                  background: page === l ? C.blueLight : "none",
+                  border: "none", cursor: "pointer", padding: "12px 16px",
+                  borderRadius: "12px", fontFamily: "DM Sans", fontWeight: page === l ? 600 : 400,
+                  fontSize: "15px", color: page === l ? C.blue : C.gray600, textAlign: "left",
+                }}
+              >
+                {l}
+              </button>
+            );
+          })}
         </div>
       )}
 
@@ -211,6 +364,12 @@ const SOCIALS = [
 
 // ─── FOOTER ──────────────────────────────────────────────────────────────────
 function Footer({ setPage }) {
+  const nav = (l) => {
+    if (l === "Stretch Wellness") setPage("Stretch App");
+    else if (l === "WanderSync") setPage("WanderSync App");
+    else setPage(l);
+    window.scrollTo(0, 0);
+  };
   return (
     <footer style={{ background: C.gray900, color: C.white, padding: "60px 40px 32px" }}>
       <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
@@ -225,7 +384,7 @@ function Footer({ setPage }) {
             </p>
           </div>
           {[
-            { title: "Company", links: ["Home", "About", "Products", "Media"] },
+            { title: "Company", links: ["Home", "About", "Stretch Wellness", "WanderSync", "Media"] },
             { title: "Explore", links: ["Future Plans", "Contact"] },
           ].map((col) => (
             <div key={col.title}>
@@ -233,7 +392,7 @@ function Footer({ setPage }) {
               {col.links.map((l) => (
                 <button
                   key={l}
-                  onClick={() => { setPage(l); window.scrollTo(0,0); }}
+                  onClick={() => nav(l)}
                   style={{ display: "block", background: "none", border: "none", color: C.white, fontSize: "14px", cursor: "pointer", marginBottom: "10px", fontFamily: "DM Sans", opacity: 0.85, textAlign: "left", transition: "opacity 0.2s" }}
                   onMouseEnter={(e) => (e.target.style.opacity = "1")}
                   onMouseLeave={(e) => (e.target.style.opacity = "0.85")}
@@ -408,7 +567,7 @@ function HomePage({ setPage }) {
               We simplify travel planning, support personal wellness, and promote healthy living through thoughtfully designed tools and engaging content.
             </p>
             <div style={{ display: "flex", gap: "14px", flexWrap: "wrap" }}>
-              <Btn onClick={() => { setPage("Products"); window.scrollTo(0,0); }}>Explore Products →</Btn>
+              <Btn onClick={() => { setPage("Stretch App"); window.scrollTo(0,0); }}>Explore Products →</Btn>
               <Btn variant="outline" onClick={() => { setPage("Media"); window.scrollTo(0,0); }}>View Content</Btn>
               <Btn variant="ghost" onClick={() => { setPage("Contact"); window.scrollTo(0,0); }}>Contact Us</Btn>
             </div>
@@ -468,7 +627,7 @@ function HomePage({ setPage }) {
                 </div>
               ))}
             </div>
-            <Btn variant="green" onClick={() => { setPage("Products"); window.scrollTo(0,0); }}>Learn More →</Btn>
+            <Btn variant="green" onClick={() => { setPage("Stretch App"); window.scrollTo(0,0); }}>Learn More →</Btn>
           </div>
           <div className="reveal" style={{ display: "flex", justifyContent: "center" }}>
             <div style={{
@@ -701,6 +860,112 @@ function ProductsPage() {
           <h3 style={{ fontFamily: "Sora", fontWeight: 700, fontSize: "28px", marginBottom: "16px" }}>Coming Soon to iOS &amp; Android</h3>
           <p style={{ color: C.gray600, marginBottom: "28px", fontSize: "16px" }}>Be the first to know when Stretch launches.</p>
           <Btn variant="green">Join the Waitlist →</Btn>
+        </div>
+      </Section>
+    </div>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// WANDERSYNC PAGE
+// ════════════════════════════════════════════════════════════════════════════
+function WanderSyncPage({ setPage }) {
+  useReveal();
+  const nav = (l) => {
+    setPage(l);
+    window.scrollTo(0, 0);
+  };
+  return (
+    <div style={{ paddingTop: "68px" }}>
+      <section style={{ padding: "80px 40px 60px", background: `linear-gradient(135deg, ${C.blueLight}, ${C.greenLight})`, textAlign: "center" }}>
+        <div className="reveal">
+          <span style={{ display: "inline-block", background: C.white, color: C.blue, padding: "6px 16px", borderRadius: "99px", fontSize: "12px", fontFamily: "Sora", fontWeight: 600, letterSpacing: "1px", textTransform: "uppercase", marginBottom: "20px" }}>Our Products</span>
+          <h1 style={{ fontSize: "clamp(32px, 5vw, 52px)", fontWeight: 800, color: C.gray900, marginBottom: "20px" }}>WanderSync App</h1>
+          <p style={{ color: C.gray600, fontSize: "18px", maxWidth: "560px", margin: "0 auto", lineHeight: 1.7 }}>
+            Intelligent, constraint-aware travel planning and collaboration for the modern explorer.
+          </p>
+        </div>
+      </section>
+
+      <Section>
+        {/* Intro */}
+        <div className="two-col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "60px", alignItems: "center", marginBottom: "80px" }}>
+          <div className="reveal">
+            <h2 style={{ fontFamily: "Sora", fontWeight: 700, fontSize: "clamp(24px, 3vw, 36px)", marginBottom: "20px", lineHeight: 1.2 }}>Travel Planning, Synchronized</h2>
+            <p style={{ color: C.gray600, fontSize: "16px", lineHeight: 1.8, marginBottom: "28px" }}>
+              WanderSync turns the chaos of group travel planning into a seamless, shared experience. Import your saved maps, input your preferences, and let our intelligent constraint-aware routing optimizer build your perfect day-by-day plan.
+            </p>
+            <div style={{ display: "flex", gap: "20px", flexWrap: "wrap", marginBottom: "28px" }}>
+              {[["10k+", "Trips Built"], ["1-Click", "Maps Import"], ["Real-time", "Sync"]].map(([val, lab]) => (
+                <div key={lab} style={{ textAlign: "center" }}>
+                  <p style={{ fontFamily: "Sora", fontWeight: 800, fontSize: "32px", background: `linear-gradient(135deg, ${C.blue}, ${C.green})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{val}</p>
+                  <p style={{ color: C.gray600, fontSize: "13px" }}>{lab}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="reveal" style={{ display: "flex", justifyContent: "center" }}>
+            <div style={{ width: "280px", background: C.gray900, borderRadius: "36px", padding: "20px", boxShadow: "0 32px 80px rgba(0,0,0,0.2)" }}>
+              <div style={{ background: `linear-gradient(160deg, ${C.blue}, ${C.green})`, borderRadius: "24px", padding: "20px 16px", marginBottom: "12px", textAlign: "center" }}>
+                <p style={{ fontFamily: "Sora", color: "rgba(255,255,255,0.7)", fontSize: "11px", marginBottom: "4px", letterSpacing: "1px", textTransform: "uppercase" }}>Tokyo Trip 🇯🇵</p>
+                <p style={{ fontFamily: "Sora", fontWeight: 700, color: C.white, fontSize: "18px" }}>Day 1 Itinerary</p>
+                <div style={{ display: "flex", justifyContent: "center", gap: "6px", marginTop: "10px" }}>
+                  {["👩‍🦰", "👨", "👩"].map((av, i) => (
+                    <div key={i} style={{ width: 24, height: 24, borderRadius: "50%", background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px" }}>{av}</div>
+                  ))}
+                </div>
+              </div>
+              {[
+                { time: "09:00 AM", name: "Senso-ji Temple", emoji: "🏮", detail: "1.5h dwell · Quiet morning walk", trans: "🚶 Walk (12m)" },
+                { time: "11:30 AM", name: "Ichiran Ramen", emoji: "🍜", detail: "1.0h dwell · Lunch constraint", trans: "🚇 Transit (15m)" },
+                { time: "01:00 PM", name: "Ueno Park", emoji: "🌸", detail: "2.0h dwell · Seasonal check ✓", trans: null },
+              ].map((item, idx) => (
+                <div key={idx}>
+                  <div style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "14px", padding: "12px 14px", display: "flex", gap: "10px", alignItems: "center" }}>
+                    <span style={{ fontSize: "22px" }}>{item.emoji}</span>
+                    <div style={{ flex: 1 }}>
+                      <p style={{ fontFamily: "Sora", color: C.white, fontSize: "12px", fontWeight: 600 }}>{item.name}</p>
+                      <p style={{ color: C.gray400, fontSize: "10px", marginTop: "2px" }}>{item.time} · {item.detail}</p>
+                    </div>
+                  </div>
+                  {item.trans && (
+                    <div style={{ display: "flex", alignItems: "center", gap: "6px", padding: "6px 20px" }}>
+                      <div style={{ width: 2, height: 12, background: "rgba(255,255,255,0.15)", marginLeft: 2 }} />
+                      <span style={{ color: C.green, fontSize: "10px", fontFamily: "Sora", fontWeight: 600 }}>{item.trans}</span>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Features */}
+        <SectionHeader label="Features" title="Designed for Smart Travel" subtitle="Powerful tools that turn scattered recommendations into a structured journey." />
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "24px" }}>
+          {[
+            { icon: "🗺️", title: "1-Click Maps Import", desc: "Paste your Google Maps Shared list, Takeout JSON, or KML files, and instantly import all places into your itinerary workspace." },
+            { icon: "🤖", title: "Constraint-Aware Routing", desc: "No more naive loops. The optimizer respects opening hours, dwell times, seasonal closures, and mixed transit types." },
+            { icon: "✍️", title: "Save-Time Intent Notes", desc: "Write why you saved a spot (e.g. 'Okonomiyaki recommended by @annie') right at capture time before you forget." },
+            { icon: "👥", title: "Real-Time Collaboration", desc: "Invite friends to vote on attractions, debate plans in the integrated group chat, and watch itinerary updates instantly." },
+            { icon: "📴", title: "Offline Itinerary Access", desc: "No signal, no stress. Access your full travel schedules, routes, and place descriptions offline while exploring." },
+            { icon: "📊", title: "Logistical Analytics", desc: "Track travel durations, total distances, walk ratios, and calorie metrics to balance active vs relaxing days." },
+          ].map((f) => (
+            <div className="reveal" key={f.title}>
+              <Card>
+                <div style={{ fontSize: "32px", marginBottom: "14px" }}>{f.icon}</div>
+                <h3 style={{ fontFamily: "Sora", fontWeight: 700, fontSize: "18px", marginBottom: "10px" }}>{f.title}</h3>
+                <p style={{ color: C.gray600, fontSize: "14px", lineHeight: 1.7 }}>{f.desc}</p>
+              </Card>
+            </div>
+          ))}
+        </div>
+
+        {/* CTA */}
+        <div className="reveal" style={{ marginTop: "60px", textAlign: "center", padding: "60px", background: `linear-gradient(135deg, ${C.blueLight}, ${C.greenLight})`, borderRadius: "24px" }}>
+          <h3 style={{ fontFamily: "Sora", fontWeight: 700, fontSize: "28px", marginBottom: "16px" }}>Ready to Sync Your Journey?</h3>
+          <p style={{ color: C.gray600, marginBottom: "28px", fontSize: "16px" }}>Be the first to plan trips with WanderSync.</p>
+          <Btn onClick={() => nav("Contact")} style={{ background: `linear-gradient(135deg, ${C.blue}, ${C.green})` }}>Join the Waitlist →</Btn>
         </div>
       </Section>
     </div>
@@ -992,7 +1257,8 @@ export default function App() {
   const pages = {
     "Home": <HomePage setPage={setPage} />,
     "About": <AboutPage />,
-    "Products": <ProductsPage />,
+    "Stretch App": <ProductsPage />,
+    "WanderSync App": <WanderSyncPage setPage={setPage} />,
     "Media": <MediaPage />,
     "Future Plans": <FuturePlansPage />,
     "Contact": <ContactPage />,
